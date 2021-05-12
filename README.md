@@ -28,6 +28,7 @@ IAM roles needs lambda s3 permission and dynamnodb and cloudwatch logs_**
     - Click on **Roles** in left hand side
     - Click **Create Role**
     - Click **Lambda** Under _Use Cases_
+    - Next Permissions
     - In the search Bar type in _S3_
     - Select **Amazon S3 Full Access**
     - In the search bar type in _Dynamo_
