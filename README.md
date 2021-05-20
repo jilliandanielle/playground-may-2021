@@ -135,12 +135,12 @@ Look for the confirmation. You can check the s3 details to make sure it is enabl
                 csv_reader = csv.reader(record_list, delimiter=',',quotechar='"')
 
                 for row in csv_reader:
-                    actor_id = row[0]
-                    firstname = row[1]
-                    surname = row[2]
-                    salary = row[3]
+                    movie_id = row[0]
+                    movie = row[1]
+                    title = row[2]
+                    year = row[3]
 
-                    print('\nActor_ID: ', actor_id, '\nFirst Name: ', firstname, '\nSurname: ', surname, '\nSalary: ', salary)
+                    print('\nMovie_ID: ', movie_id, '\nMovie: ', movie, '\nTitle: ', title, '\nYear: ', year)
 
             except Exception as e:
                 print(str(e))
@@ -193,20 +193,20 @@ Look for the confirmation. You can check the s3 details to make sure it is enabl
                     csv_reader = csv.reader(record_list, delimiter=',',quotechar='"')
 
                     for row in csv_reader:
-                        actor_id = row[0]
-                        firstname = row[1]
-                        surname = row[2]
-                        salary = row[3]
+                        movie_id = row[0]
+                        movie = row[1]
+                        title = row[2]
+                        year = row[3]
 
-                        print('\nActor_ID: ', actor_id, '\nFirst Name: ', firstname, '\nSurname: ', surname, '\nSalary: ', salary)
+                        print('\nMovie_ID: ', movie_id, '\nMovie: ', movie, '\nTitle: ', title, '\nYear: ', year)
     
                         add_to_db = dynamodb.put_item(
                             TableName = 'playground-db-jillian',
                             Item = {
-                                'actor_id' : {'N':str(actor_id)},
-                                'firstname' : {'S':str(firstname)},
-                                'surname' : {'S':str(surname)},
-                                'salary' : {'N':str(salary)},
+                                'movie_id' : {'N':str(movie_id)},
+                                'movie' : {'S':str(movie)},
+                                'title' : {'S':str(title)},
+                                'year' : {'N':str(year)},
                             })
                         print('\nSuccessfully added the records to the DynamoDB Table!\n')
 
