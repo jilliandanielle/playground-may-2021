@@ -15,7 +15,8 @@ During this playground you will:
     - Click **Create Bucket**
     - Name Bucket
         - S3 is global. They need to be unique
-        - Naming convection: "playground-s3-< your name >"
+        - Naming convection: "playground-s3-*-panda"
+        - Example: "playground-s3-silly-panda"
     - Block all public access
     - Create Bucket
     
@@ -37,7 +38,8 @@ IAM roles needs lambda s3 permission and dynamnodb and cloudwatch logs_**
     - Select **AWSOpsWorksCloudWatchLogs**
     - Next Tags. This is good practice! Add tags
         - Name: < your name >
-    - Name Role - "playground-role-< yourname >"
+    - Name Role - "playground-role-*-panda"
+    - example "playground-role-silly-panda"
     
     Check to make sure all 3 policies are there
     
@@ -45,11 +47,11 @@ IAM roles needs lambda s3 permission and dynamnodb and cloudwatch logs_**
     - Navigate to Lambda
     - Click **Create Function**
     - **Author From Scratch**
-    - Function name- "playground-lambda-< yourname >"
+    - Function name- "playground-lambda-*-panda" (example "playground-lambda-silly-panda")
     - **Python 3.8**
     - Permissions
         - Use an existing role
-        -  Find your role (playground-role-< yourname >)
+        -  Find your role (playground-role-*-panda) 
     - **Create function**
 
     Check out that confirmation!
@@ -62,7 +64,7 @@ IAM roles needs lambda s3 permission and dynamnodb and cloudwatch logs_**
     - Design- **Add Trigger**
     - Search- _S3_
     - Bucket- Search for the S3 bucket you created 
-        - (playground-s3-< your name >)
+        - (playground-s3-*-panda)
     - Event Type- All 
     - Suffix- .csv
     - Prefix- (optional)
@@ -98,15 +100,15 @@ Look for the confirmation. You can check the s3 details to make sure it is enabl
                 'body': json.dumps('CSV to DynamoDB Success!')
             }
 - Click **Deploy**
-- Configure test event (upper right)
+- Click **Test**
+- Navigate to the Test tab 
     - Event Template-Search 's3 put' (this shows the structure for the test)
-    - Event name - "csv test"
+    - Event name - "playgroundcsvtest"
     - Look for the S3 bucket
         - change bucket name to {name of bucket}
         - change object key to {name of file}
     - Create
-    - Check the logs
-- We can know look at CloudWatch to check the logs. 
+    - Test again
 
 5. Triggering the Lambda with a S3 upload.
 - First let's code some code to read through the rows and print the items out so we can see it in the logs.
@@ -156,9 +158,9 @@ Look for the confirmation. You can check the s3 details to make sure it is enabl
 6. Create the DynamoDB Table
     - Navigate to DynamoDB in a new tab. Important! Make sure you are in the same region as your Lambda Function.
     - Click **Create table**.
-    - Enter <playground-db-jillian> for the **Table name**.
-    - Enter <date> for the **Partition key** and select <Number> for the key type. 
-    - Add tags because it's good practice! name: jillian
+    - Enter "playground-db-*-panda" for the **Table name**. (example: "playground-db-silly-panda")
+    - Enter < actorid > for the **Partition key** and select < Number > for the key type. 
+    - Add tags because it's good practice! name: jillian, purpose: playground
     - Leave the **Use default settings** box checked and choose **Create**.
     - Click on the tabs on top just to check there are no items. After we upload, the items will appear here
 
