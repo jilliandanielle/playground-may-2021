@@ -76,29 +76,30 @@ Look for the confirmation. You can check the s3 details to make sure it is enabl
 4. _**Code to connect the Lambda function to the S3 bucket + testing our code**_
 
 - Copy the code below into the code:
+```
+import json
+import csv
+import boto3
 
-        import json
-        import csv
-        import boto3
+def lambda_handler(event, context):
+    region = 'eu-west-2'
+    record_list = []
 
-        def lambda_handler(event, context):
-            region = 'us-west-2'
-            record_list = []
+    try:
+        s3 = boto3.client('s3')  
+        bucket = event['Records'][0]['s3']['bucket']['name']
+        key = event['Records'][0]['s3']['object']['key']
 
-            try:
-                s3 = boto3.client('s3')  
-                bucket = event['Records'][0]['s3']['bucket']['name']
-                key = event['Records'][0]['s3']['object']['key']
+        print('\nBucket: ', bucket, 'Key: ',key)
 
-                print('\nBucket: ', bucket, 'Key: ',key)
+    except Exception as e:
+        print(str(e))
 
-            except Exception as e:
-                print(str(e))
-
-            return {
-                'statusCode':200,
-                'body': json.dumps('CSV to DynamoDB Success!')
-            }
+    return {
+        'statusCode':200,
+        'body': json.dumps('CSV to DynamoDB Success!')
+    }
+```
 - Click **Deploy**
 - Click **Test**
 - Navigate to the Test tab 
@@ -112,43 +113,44 @@ Look for the confirmation. You can check the s3 details to make sure it is enabl
 
 5. Triggering the Lambda with a S3 upload.
 - First let's code some code to read through the rows and print the items out so we can see it in the logs.
+```
+import json
+import csv
+import boto3
 
-        import json
-        import csv
-        import boto3
+def lambda_handler(event, context):
+    region = 'eu-west-2'
+    record_list = []
 
-        def lambda_handler(event, context):
-            region = 'us-east-2'
-            record_list = []
+    try:
+        s3 = boto3.client('s3') 
+        bucket = event['Records'][0]['s3']['bucket']['name']
+        key = event['Records'][0]['s3']['object']['key']
 
-            try:
-                s3 = boto3.client('s3') 
-                bucket = event['Records'][0]['s3']['bucket']['name']
-                key = event['Records'][0]['s3']['object']['key']
+        print('\nBucket: ', bucket, '\nKey:',key)
 
-                print('\nBucket: ', bucket, '\nKey:',key)
+        csv_file = s3.get_object(Bucket = bucket, Key= key)
 
-                csv_file = s3.get_object(Bucket = bucket, Key= key)
+        record_list = csv_file['Body'].read().decode('utf-8').split('\n')
+        
+        csv_reader = csv.reader(record_list, delimiter=',',quotechar='"')
 
-                record_list = csv_file['Body'].read().decode('utf-8').split('\n')
-                
-                csv_reader = csv.reader(record_list, delimiter=',',quotechar='"')
+        for row in csv_reader:
+            movie_id = row[0]
+            movie = row[1]
+            title = row[2]
+            year = row[3]
 
-                for row in csv_reader:
-                    movie_id = row[0]
-                    movie = row[1]
-                    title = row[2]
-                    year = row[3]
+            print('\nMovie_ID: ', movie_id, '\nMovie: ', movie, '\nTitle: ', title, '\nYear: ', year)
 
-                    print('\nMovie_ID: ', movie_id, '\nMovie: ', movie, '\nTitle: ', title, '\nYear: ', year)
+    except Exception as e:
+        print(str(e))
 
-            except Exception as e:
-                print(str(e))
-
-            return {
-                'statusCode':200,
-                'body': json.dumps('CSV to DynamoDB Success!')
-            }
+    return {
+        'statusCode':200,
+        'body': json.dumps('CSV to DynamoDB Success!')
+    }
+```
 
 - Deploy
 - Nagivate to S3 and upload your file to the S3 bucket.
@@ -166,58 +168,58 @@ Look for the confirmation. You can check the s3 details to make sure it is enabl
 
 7. Add code to connect the DynamoDB to the Lambda Function
 
+```
+import json
+import csv
+import boto3
 
-            import json
-            import csv
-            import boto3
+def lambda_handler(event, context):
+    region = 'eu-west-2'
+    record_list = []
 
-            def lambda_handler(event, context):
-                region = 'us-east-2'
-                record_list = []
+    try:
+        s3 = boto3.client('s3') 
 
-                try:
-                    s3 = boto3.client('s3') 
+        dynamodb = boto3.client('dynamodb', region_name = region)
 
-                    dynamodb = boto3.client('dynamodb', region_name = region)
+        bucket = event['Records'][0]['s3']['bucket']['name']
+        key = event['Records'][0]['s3']['object']['key']
 
-                    bucket = event['Records'][0]['s3']['bucket']['name']
-                    key = event['Records'][0]['s3']['object']['key']
+        print('\nBucket: ', bucket, '\nKey:',key)
 
-                    print('\nBucket: ', bucket, '\nKey:',key)
+        csv_file = s3.get_object(Bucket = bucket, Key= key)
 
-                    csv_file = s3.get_object(Bucket = bucket, Key= key)
+        record_list = csv_file['Body'].read().decode('utf-8').split('\n')
 
-                    record_list = csv_file['Body'].read().decode('utf-8').split('\n')
+        
+        csv_reader = csv.reader(record_list, delimiter=',',quotechar='"')
 
-                    
-                    csv_reader = csv.reader(record_list, delimiter=',',quotechar='"')
+        for row in csv_reader:
+            movie_id = row[0]
+            movie = row[1]
+            title = row[2]
+            year = row[3]
 
-                    for row in csv_reader:
-                        movie_id = row[0]
-                        movie = row[1]
-                        title = row[2]
-                        year = row[3]
+            print('\nMovie_ID: ', movie_id, '\nMovie: ', movie, '\nTitle: ', title, '\nYear: ', year)
 
-                        print('\nMovie_ID: ', movie_id, '\nMovie: ', movie, '\nTitle: ', title, '\nYear: ', year)
-    
-                        add_to_db = dynamodb.put_item(
-                            TableName = 'playground-db-jillian',
-                            Item = {
-                                'movie_id' : {'N':str(movie_id)},
-                                'movie' : {'S':str(movie)},
-                                'title' : {'S':str(title)},
-                                'year' : {'N':str(year)},
-                            })
-                        print('\nSuccessfully added the records to the DynamoDB Table!\n')
+            add_to_db = dynamodb.put_item(
+                TableName = 'playground-db-jillian',
+                Item = {
+                    'movie_id' : {'N':str(movie_id)},
+                    'movie' : {'S':str(movie)},
+                    'title' : {'S':str(title)},
+                    'year' : {'N':str(year)},
+                })
+            print('\nSuccessfully added the records to the DynamoDB Table!\n')
 
-                except Exception as e:
-                    print(str(e))
+    except Exception as e:
+        print(str(e))
 
-            return {
-                'statusCode':200,
-                'body': json.dumps('CSV to DynamoDB Success!')
-            }
-
+return {
+    'statusCode':200,
+    'body': json.dumps('CSV to DynamoDB Success!')
+}
+```
 
 
 8. Check DynamoDB to make sure your items are there. You can also check out CLoudWatch and look through the logs. 
