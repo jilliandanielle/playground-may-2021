@@ -25,26 +25,27 @@ During this playground you will:
 2. **_Give Permissions-Role
 IAM roles needs lambda s3 permission and dynamnodb and cloudwatch logs_**
 
-    - Navigate to IAM (Global region)
+    - Navigate to **IAM** (Global region)
     - Click on **Roles** in left hand side
     - Click **Create Role**
     - Click **Lambda** Under _Use Cases_
     - Next Permissions
     - In the search Bar type in _S3_
-    - Select **Amazon S3 Full Access**
+        - Select **Amazon S3 Full Access**
     - In the search bar type in _Dynamo_
-    - Select **DynamoDBFullAccess**
+        - Select **DynamoDBFullAccess**
     - In the search bar type in _CloudWatch_
-    - Select **AWSOpsWorksCloudWatchLogs**
-    - Next Tags. This is good practice! Add tags
+        - Select **AWSOpsWorksCloudWatchLogs**
+    - Next **Tags**. This is good practice! Add tags
         - Name: < your name >
     - Name Role - "playground-role-*-panda"
-    - example "playground-role-silly-panda"
+        - example "playground-role-silly-panda"
     
     Check to make sure all 3 policies are there
     
 3. A **_Create Lambda Function_**
     - Navigate to Lambda
+    - Make sure you are in the correct region < eu-west-2 >
     - Click **Create Function**
     - **Author From Scratch**
     - Function name- "playground-lambda-*-panda" (example "playground-lambda-silly-panda")
@@ -68,6 +69,7 @@ IAM roles needs lambda s3 permission and dynamnodb and cloudwatch logs_**
     - Event Type- All 
     - Suffix- .csv
     - Prefix- (optional)
+    - Click **Add**
     
 Look for the confirmation. You can check the s3 details to make sure it is enabled.
 
@@ -75,7 +77,7 @@ Look for the confirmation. You can check the s3 details to make sure it is enabl
 
 4. _**Code to connect the Lambda function to the S3 bucket + testing our code**_
 
-- Copy the code below into the code:
+- Copy the code below into **lambda_function.py**:
 ```
 import json
 import csv
