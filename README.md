@@ -115,7 +115,7 @@ def lambda_handler(event, context):
         }
 ```
 - Click **Deploy** (this saves the code)
-- Configure Test Event
+- **Test** > Configure Test Event
 - Event template
     - Search _S3_ 
     - Select _Amazon S3 Put_
@@ -132,11 +132,10 @@ def lambda_handler(event, context):
     - Make sure you upload **playground-test.csv** and **not** playground-marvel.csv
     - Check to make sure the upload is successful
 
-- Navigate back to *Lambda*
-- Click on the tab **Monitor** 
-- Click on the **Logs** tab
-    - CloudWatch Logs Insights
-- Select the latest entry in _Recent invocations_ under **LogStream** (a new tab will open up)
+- Navigate back to *CloudWatch* (open in a new tab)
+- Click on **Log groups** on the left hand side
+- Click on your log group
+- Select the latest entry under **LogStream**
 - Check the logs for your **bucket name** and the **CSV file called playground-test.csv** 
 
 5. _**Reading the CSV file with Python using boto3.**_
