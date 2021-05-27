@@ -27,13 +27,13 @@ def lambda_handler(event, context):
 
     except Exception as e:
         print(str(e))
-
+        
         return {
-            'statusCode' : 500,
-            'body'       : json.dumps('Something went wrong!')
+            'statusCode': 500,
+            'body': json.dumps('Oh no, something went wrong!')
         }
     else:
         return {
-            'statusCode' : 200,
-            'body'       : json.dumps('CSV to DynamoDB Success!')
+            'statusCode': 200,
+            'body': json.dumps('Success!')
         }

@@ -18,7 +18,7 @@ def lambda_handler(event, context):
         
         return {
             'statusCode': 500,
-            'body': json.dumps('Eek, something went wrong!')
+            'body': json.dumps('Oh no, something went wrong!')
         }
     else:
         return {

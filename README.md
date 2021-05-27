@@ -106,7 +106,7 @@ def lambda_handler(event, context):
         
         return {
             'statusCode': 500,
-            'body': json.dumps('Eek, something went wrong!')
+            'body': json.dumps('Oh no, something went wrong!')
         }
     else:
         return {
@@ -159,7 +159,7 @@ def lambda_handler(event, context):
 
         print('Bucket: ', bucket, '\nKey:',key)
 
-        csv_file    = s3.get_object(Bucket = bucket, Key = key)
+        csv_file = s3.get_object(Bucket = bucket, Key = key)
         record_list = csv_file['Body'].read().decode('utf-8').split('\n')
         csv_reader  = csv.reader(record_list, delimiter = ',', quotechar = '"')
 
@@ -173,15 +173,15 @@ def lambda_handler(event, context):
 
     except Exception as e:
         print(str(e))
-
+        
         return {
-            'statusCode' : 500,
-            'body'       : json.dumps('Something went wrong!')
+            'statusCode': 500,
+            'body': json.dumps('Oh no, something went wrong!')
         }
     else:
         return {
-            'statusCode' : 200,
-            'body'       : json.dumps('CSV to DynamoDB Success!')
+            'statusCode': 200,
+            'body': json.dumps('Success!')
         }
 ```
 - Click **Deploy** (this saves the code)
@@ -260,13 +260,13 @@ def lambda_handler(event, context):
         print(str(e))
         
         return {
-            'statusCode' : 500,
-            'body'       : json.dumps('Something went wrong!')
+            'statusCode': 500,
+            'body': json.dumps('Oh no, something went wrong!')
         }
     else:
         return {
-            'statusCode' : 200,
-            'body'       : json.dumps('CSV to DynamoDB Success!')
+            'statusCode': 200,
+            'body': json.dumps('Success!')
         }
 ```
 - Change the TableName on Line 29 to the name of your table
