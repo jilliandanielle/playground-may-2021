@@ -127,7 +127,7 @@ Uploading a CSV file to S3 and checking CloudWatch
 - Select the latest entry under **LogStream** (a new tab will open up)
 - Check the logs for your **bucket name** and the **CSV file**
 
-5. Reading the CSV file with Python using boto3.
+5. _**Reading the CSV file with Python using boto3.**_
 
 **Version 2**
 ```
@@ -181,7 +181,7 @@ To mock test an upload
 - Check the _Execution Results_
  
 
-6. Create the DynamoDB Table
+6. _**Create the DynamoDB Table**_
     - Navigate to DynamoDB in a new tab. Important! Make sure you are in the same region as your Lambda Function.
     - Click **Create table**.
     - Enter "playground-db-*-panda" for the **Table name**. (example: "playground-db-silly-panda")
@@ -190,7 +190,7 @@ To mock test an upload
     - Leave the **Use default settings** box checked and choose **Create**.
     - Click on the tabs on top just to check there are no items. After we upload, the items will appear here
 
-7. Add code to connect the DynamoDB to the Lambda Function
+7. _**Add code to connect the DynamoDB to the Lambda Function**_
 
 **Version 3**
 ```
@@ -251,4 +251,4 @@ return {
 
 
 
-This concludes our lab today!
+This concludes our lab today! 
