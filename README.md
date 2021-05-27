@@ -268,7 +268,7 @@ def lambda_handler(event, context):
             'body': json.dumps('Success!')
         }
 ```
-- Change the TableName on Line 29 to the name of your table
+- Change the TableName on Line 30 to the name of your table
 - Click **Deploy** 
 - Navigate back to S3
 - Upload **playground-marvel.csv** 
