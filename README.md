@@ -75,9 +75,11 @@ Look for the confirmation. You can check the s3 details to make sure it is enabl
 
 
 
-4. _**Code to connect the Lambda function to the S3 bucket + testing our code**_
+4. _**Code to connect the Lambda function to the S3 bucket + Mocking an upload**_
 
 - Copy the code below into **lambda_function.py**:
+
+**Version 1**
 ```
 import json
 import csv
@@ -92,7 +94,7 @@ def lambda_handler(event, context):
         bucket = event['Records'][0]['s3']['bucket']['name']
         key = event['Records'][0]['s3']['object']['key']
 
-        print('\nBucket: ', bucket, 'Key: ',key)
+        print('\nBucket: ', bucket, '\nCSV File: ',key)
 
     except Exception as e:
         print(str(e))
@@ -102,19 +104,32 @@ def lambda_handler(event, context):
         'body': json.dumps('CSV to DynamoDB Success!')
     }
 ```
-- Click **Deploy**
-- Click **Test**
-- Navigate to the Test tab 
-    - Event Template-Search 's3 put' (this shows the structure for the test)
-    - Event name - "playgroundcsvtest"
-    - Look for the S3 bucket
-        - change bucket name to {name of bucket}
-        - change object key to {name of file}
-    - Create
-    - Test again
 
-5. Triggering the Lambda with a S3 upload.
-- First let's code some code to read through the rows and print the items out so we can see it in the logs.
+Configure Test Event
+- Event template
+    - Search _S3_ 
+    - Select _Amazon S3 Put_
+- Event name
+    - playgroundcsvtest
+- Create
+- Click **Test** 
+- Check the *Execution Results* to see the results
+
+Uploading a CSV file to S3 and checking CloudWatch
+- Navigate back to S3 (open in new tab if not there already)
+- Search for your bucket
+- Upload the CSV file to your bucket
+    - Check to make sure the upload is successful
+
+- Navigate back to *Lambda*
+- Click on the tab **Monitoring** 
+- Scroll down to **CloudWatch Insights**
+- Select the latest entry under **LogStream** (a new tab will open up)
+- Check the logs for your **bucket name** and the **CSV file**
+
+5. Reading the CSV file with Python using boto3.
+
+**Version 2**
 ```
 import json
 import csv
@@ -129,7 +144,7 @@ def lambda_handler(event, context):
         bucket = event['Records'][0]['s3']['bucket']['name']
         key = event['Records'][0]['s3']['object']['key']
 
-        print('\nBucket: ', bucket, '\nKey:',key)
+        print('\nBucket: ', bucket, '\nCSV File: ',key)
 
         csv_file = s3.get_object(Bucket = bucket, Key= key)
 
@@ -154,10 +169,17 @@ def lambda_handler(event, context):
     }
 ```
 
-- Deploy
-- Nagivate to S3 and upload your file to the S3 bucket.
-- Test
-- Check the logs to make sure it works! You should see the contents of the file in the output. 
+To mock test an upload 
+- Navigate to Lambda
+- Configure Test Events
+- Under "S3" replace "example-bucket" with the name of your bucket
+    - "playground-s3-silly-panda"
+- Under "object" replace "test/key" with the name of the csv file 
+    - playground-marvel.csv
+- Save
+- Click on test to simulate a CSV upload (trigger)
+- Check the _Execution Results_
+ 
 
 6. Create the DynamoDB Table
     - Navigate to DynamoDB in a new tab. Important! Make sure you are in the same region as your Lambda Function.
@@ -170,6 +192,7 @@ def lambda_handler(event, context):
 
 7. Add code to connect the DynamoDB to the Lambda Function
 
+**Version 3**
 ```
 import json
 import csv
@@ -187,7 +210,7 @@ def lambda_handler(event, context):
         bucket = event['Records'][0]['s3']['bucket']['name']
         key = event['Records'][0]['s3']['object']['key']
 
-        print('\nBucket: ', bucket, '\nKey:',key)
+        print('\nBucket: ', bucket, '\nCSV File: ',key)
 
         csv_file = s3.get_object(Bucket = bucket, Key= key)
 
